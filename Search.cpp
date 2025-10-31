@@ -1,10 +1,11 @@
 #include <iostream>
-#include <algorithm> 
+#include <algorithm>
+#include <vector>
 using namespace std;
 
 // Sequential Search (Iterative)
-int sequentialSearch_iterativeMethod(int arr[], int n, int target) {
-    for (int i = 0; i < n; i++) {
+int sequentialSearch_iterativeMethod(const vector<long long>& arr, long long target) {
+    for (int i = 0; i < arr.size(); i++) {
         if (arr[i] == target) {
             return i;
         }
@@ -13,19 +14,20 @@ int sequentialSearch_iterativeMethod(int arr[], int n, int target) {
 }
 
 // Sequential Search (Recursive)
-int sequentialSearch_Recursive(int arr[], int n, int target, int i) {
-    if (i == n) {
+int sequentialSearch_Recursive(const vector<long long>& arr, int i, long long target) {
+    if (i == arr.size()) {
         return -1; // not found
     }
     if (arr[i] == target) {
         return i;
     }
-    return sequentialSearch_Recursive(arr, n, target, i + 1);
+    return sequentialSearch_Recursive(arr, i + 1, target);
 }
+
 // Binary Search (Iterative)
-int binarySearch_iterativeMethod(int arr[], int n, int target) {
-    sort(arr, arr + n); // make sure array is sorted
-    int l = 0, r = n - 1;
+int binarySearch_iterativeMethod(vector<long long> arr, long long target) {
+    sort(arr.begin(), arr.end()); // make sure array is sorted
+    int l = 0, r = arr.size() - 1;
     while (l <= r) {
         int mid = (l + r) / 2;
         if (arr[mid] == target)
@@ -39,7 +41,7 @@ int binarySearch_iterativeMethod(int arr[], int n, int target) {
 }
 
 // Binary Search (Recursive)
-int binarySearch_Recursive(int arr[], int l, int r, int target) {
+int binarySearch_Recursive(const vector<long long>& arr, int l, int r, long long target) {
     if (l > r)
         return -1;
     int mid = (l + r) / 2;
@@ -56,14 +58,14 @@ int main() {
     cout << "Enter size of array: ";
     cin >> size;
 
-    int array[size];
+    vector<long long> array(size);
     cout << "Enter elements of array: ";
     for (int i = 0; i < size; i++) {
         cin >> array[i];
     }
 
+    long long target;
     cout << "Enter the element you want to find: ";
-    int target;
     cin >> target;
 
     int choice;
@@ -79,22 +81,23 @@ int main() {
 
     switch (choice) {
         case 1:
-            result = sequentialSearch_iterativeMethod(array, size, target);
+            result = sequentialSearch_iterativeMethod(array, target);
             break;
         case 2:
-            result = sequentialSearch_Recursive(array, size, target, 0);
+            result = sequentialSearch_Recursive(array, 0, target);
             break;
         case 3:
-            result = binarySearch_iterativeMethod(array, size, target);
+            result = binarySearch_iterativeMethod(array, target);
             break;
         case 4:
-            sort(array, array + size); // ensure sorted before recursive binary search
+            sort(array.begin(), array.end()); // ensure sorted before recursive binary search
             result = binarySearch_Recursive(array, 0, size - 1, target);
             break;
         default:
             cout << "Invalid choice!\n";
             return 0;
     }
+
     if (result != -1)
         cout << "Element " << target << " found at index " << result << endl;
     else
